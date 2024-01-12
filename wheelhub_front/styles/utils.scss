@@ -55,6 +55,7 @@
 }
 
 .btn-back {
+  @include btn;
   border: 0 solid transparent;
 }
 
