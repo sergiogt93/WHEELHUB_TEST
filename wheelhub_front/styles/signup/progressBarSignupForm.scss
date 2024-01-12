@@ -16,7 +16,8 @@
   padding: 1rem;
 }
 
-.numberProgressBar {
+
+@mixin numberProgressBar {
   border-radius: 100%;
   display: flex;
   justify-content: center;
@@ -27,15 +28,18 @@
 }
 
 .numberProgressBarActive {
+  @include numberProgressBar;
   background-color: $dark-green-color;
   color: $white;
 }
 
 .numberProgressBarPrevious {
+  @include numberProgressBar;
   background-image: url('/assets/img/checked.png');
 }
 
 .numberProgressBarNext {
+  @include numberProgressBar;
   background-color: $btn-bg-disabled;
   color: $white;
 }

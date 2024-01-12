@@ -13,15 +13,15 @@ export const ProgressBarSignupForm = () => {
     for (let index = 0; index < steps.length; index++) {
       let className = '';
       if(index === currentStepIndex) {
-        className = 'numberProgressBar numberProgressBarActive';
+        className = 'numberProgressBarActive';
       }
 
       if(index < currentStepIndex) {
-        className = 'numberProgressBar numberProgressBarPrevious';
+        className = 'numberProgressBarPrevious';
       }
 
       if(index > currentStepIndex) {
-        className = 'numberProgressBar numberProgressBarNext';
+        className = 'numberProgressBarNext';
       }
 
       pages.push(
