@@ -13,26 +13,3 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
-
-.app {
-  .app-content{
-    margin: 25px;
-  }
-  p{
-    color: $text-color;
-    font-size: 15px;
-    font-weight: 500;
-  }
-  h4{
-    color: $dark-green-color;
-    font-weight: 700;
-  }
-  img {
-    max-width: 800px;
-    margin-bottom: 15px;
-  }
-  .app-header-logo{
-    max-height: 80px;
-    border: none;
-  }
-}
