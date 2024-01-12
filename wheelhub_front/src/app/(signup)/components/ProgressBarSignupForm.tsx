@@ -3,6 +3,7 @@
 import '#styles/signup/progressBarSignupForm.scss';
 import { useSignUpContext } from '#app/(signup)/context/SignupFormContext';
 import { useProgressActiveSteps } from '#app/(common)/useProgressActiveSteps';
+import { FaCheckCircle } from "react-icons/fa";
 
 export const ProgressBarSignupForm = () => {
   const { steps, currentStepIndex } = useSignUpContext();
@@ -12,23 +13,27 @@ export const ProgressBarSignupForm = () => {
     const pages = [];
     for (let index = 0; index < steps.length; index++) {
       let className = '';
+      let fragment = <></>;
       if(index === currentStepIndex) {
-        className = 'numberProgressBarActive';
+        fragment = <div key={index} className='numberProgressBarActive'>
+          { index + 1 }
+        </div>
       }
 
       if(index < currentStepIndex) {
-        className = 'numberProgressBarPrevious';
+        fragment = <div key={index} className='numberProgressBarPrevious'>
+          <FaCheckCircle className='iconProgressBarPrevious'/>
+        </div>
       }
 
       if(index > currentStepIndex) {
         className = 'numberProgressBarNext';
+        fragment = <div key={index} className='numberProgressBarNext'>
+          { index + 1 }
+        </div>
       }
 
-      pages.push(
-        <div key={index + 1} className={className}>
-          { index >= currentStepIndex ? index + 1: null}
-        </div>
-      )
+      pages.push(fragment)
     }
     return pages;
   }
