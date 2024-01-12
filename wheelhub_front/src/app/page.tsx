@@ -5,7 +5,7 @@ import SignupFormContextProvider from '#app/(signup)/context/SignupFormContext';
 
 export default function Home() {
   return (
-    <main className="app">
+    <main>
       <SignupFormContextProvider>
         <SignUpWrapper />
       </SignupFormContextProvider>
