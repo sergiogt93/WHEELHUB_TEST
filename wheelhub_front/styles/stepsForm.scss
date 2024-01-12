@@ -1,0 +1,29 @@
+@import "base";
+@import "utils";
+
+.stepsForm {
+  margin: auto 15%;
+  width: 70%;
+}
+
+.stepsForm > h2 {
+  padding-bottom: 2rem;
+}
+
+.stepFormActions {
+  display: flex;
+  justify-content: space-between;
+}
+
+.logoForm {
+  width: 30%;
+  height: 30%;
+  margin: auto 30%;
+}
+
+@media (min-width: 592px) {
+  .stepsForm {
+    margin: auto 30%;
+    width: 40%;
+  }
+}

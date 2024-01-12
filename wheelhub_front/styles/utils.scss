@@ -1,0 +1,81 @@
+@import "base";
+
+.textDanger {
+  color: $red;
+}
+
+.boxErrInput {
+  border: .2rem solid $red;
+}
+
+.textInputMark {
+  padding-left: 2.2rem;
+}
+
+.markedWord {
+  padding-bottom: .5rem;
+  border-bottom: .3rem solid $light-green-color;
+}
+
+.markedSuccessWord {
+  border-bottom: 100% solid $dark-success;
+}
+
+.markedDangerWord {
+  border-bottom: .3rem solid $dark-warning;
+}
+
+.markedWarningWord {
+  border-bottom: .3rem solid $dark-danger;
+}
+
+.markFinalBox {
+  margin-bottom: .8rem;
+  border-bottom: .1rem solid $marked-end-line;
+}
+
+@mixin btn {
+  border-radius: 0px;
+  padding: .5rem;
+  font-size: 1rem;
+  font-weight: bold;
+  box-shadow: none;
+}
+
+.btn-send  {
+  @include btn;
+  color: $white;
+  background-color: $btn-bg;
+  border: 0 solid $btn-bg;
+}
+
+.btn-send:disabled  {
+  background-color: $btn-bg-disabled;
+  border: 0 solid $btn-bg-disabled;
+}
+
+.btn-back {
+  border: 0 solid transparent;
+}
+
+.btn-last {
+  border: 0 solid transparent;
+  background-color: $white;
+}
+
+.inputMark {
+  position: absolute;
+  height: 1.5rem;
+  width: 1.5rem;
+  border: 0.2rem $marked-end-line solid;
+  padding-left: 0%;
+}
+
+/* Toogle */
+input[type="checkbox"]:checked + .inputMark {
+  background-color: $white;
+}
+
+input[type="checkbox"]:checked + .inputMark {
+  background-color: $light-green-color;
+}

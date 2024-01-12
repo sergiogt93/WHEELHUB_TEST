@@ -1,0 +1,68 @@
+@import "base";
+@import "utils";
+
+.mainProgressBar {
+  background-color: $light-green-color;
+}
+
+.boxProgressBar {
+  position: relative;
+  margin: auto 20%;
+  width: 60%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.numberProgressBar {
+  border-radius: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1.5rem;
+  height: .5rem;
+  z-index: 1;
+}
+
+.numberProgressBarActive {
+  background-color: $dark-green-color;
+  color: $white;
+}
+
+.numberProgressBarPrevious {
+  background-image: url('/assets/img/checked.png');
+}
+
+.numberProgressBarNext {
+  background-color: $btn-bg-disabled;
+  color: $white;
+}
+
+.lineProgressBar {
+  position: absolute;
+  width: 60%;
+  top: 35%;
+}
+
+.indicatorProgressBar {
+  height: .2rem;
+  appearance: none;
+  background: $white;
+  width: 100%;
+
+  /*Chrome and safari */
+  &::-webkit-progress-bar {
+    background: white;
+  }
+
+  &::-webkit-progress-value {
+    background: $dark-green-color;
+  }
+
+  /*Firefox */
+  &::-moz-progress-bar {
+    background-color: $dark-green-color;
+  }
+}
