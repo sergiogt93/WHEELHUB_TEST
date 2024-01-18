@@ -18,6 +18,10 @@ export const StepUserForm = () => {
     togglePassVisibility, toggleConfirmPassVisibility
   } = usePasswordToogle();
 
+  const renderError = (errorMessage: string) => (
+    errorMessage.length > 0 ? <p className="textDanger errPass">{errorMessage}</p> : null
+  );
+
   return (
     <>
     <form className="markFinalBox stepMainUserReg">
@@ -32,10 +36,7 @@ export const StepUserForm = () => {
           ref={tagUsername}
           data-testid={"username"}
         />
-        { errUsername.length > 0
-            ? (<p className="textDanger errPass">{errUsername}</p>)
-            : null
-          }
+        { renderError(errUsername) }
       </div>
       <div className="formGroupPasswordUserReg">
         <div className="groupShowIconPass">
@@ -51,10 +52,7 @@ export const StepUserForm = () => {
             data-testid={"password"}
           />
           <IconPass className='passToogleIcon' onClick={togglePassVisibility}/>
-          { errPassword.length > 0
-            ? (<p className="textDanger errPass">{errPassword}</p>)
-            : null
-          }
+          { renderError(errUsername) }
         </div>
         <div className="groupShowIconPass">
           <label htmlFor="confirmPassword">Repite tu contraseña</label>
@@ -69,10 +67,7 @@ export const StepUserForm = () => {
             data-testid={"confirmPassword"}
           />
           <IconConfirmPass className='passToogleIcon' onClick={toggleConfirmPassVisibility} />
-          { errConfirmPassword.length > 0
-            ? (<p className="textDanger errPass">{errConfirmPassword}</p>)
-            : null
-          }
+          { renderError(errUsername) }
         </div>
       </div>
       <p>
@@ -99,7 +94,7 @@ export const StepUserForm = () => {
       data-testid={"sendStepUser"}
     >
       { isLastStep ? 'Volver al inicio': 'Siguiente >'}
-      { loadingSpinner ? <IconSpinner />: null}
+      { loadingSpinner && <IconSpinner />}
     </button>
   </div>
   </>

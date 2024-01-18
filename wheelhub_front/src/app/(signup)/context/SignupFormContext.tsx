@@ -27,34 +27,20 @@ const initialData: FormData = {
   track: '',
 }
 
-interface ISignupContext {
+interface ISignupContext extends ReturnType<typeof useMultipleStep> {
   data: FormData,
   steps: JSX.Element[],
-  currentStep: JSX.Element,
-  currentStepIndex: number,
-  isFirstStep: boolean,
-  isLastStep: boolean,
   updateFields: (data: FormData) => void,
-  back: () => void
-  next: () => void,
-  goTo: (index: number) => void
 }
 
-const SignUpFormContext = createContext<ISignupContext>({
-  data: initialData,
-  steps: [],
-  currentStep: <></>,
-  currentStepIndex: 0,
-  isFirstStep: false,
-  isLastStep: false,
-  updateFields: (data: FormData) => {},
-  back: () => {},
-  next: () => {},
-  goTo: (index: number) => {},
-});
+const SignUpFormContext = createContext<ISignupContext | undefined>(undefined);
 
 export function useSignUpContext() {
-  return useContext(SignUpFormContext)
+  const context = useContext(SignUpFormContext);
+  if (!context) {
+    throw new Error('useSignUpContext must be used within a SignUpFormContextProvider');
+  }
+  return context;
 }
 
 export default function SignUpFormContextProvider({
@@ -80,9 +66,10 @@ export default function SignUpFormContextProvider({
   const progressActive = useProgressActiveSteps(
     { steps, currentStepIndex: multipleStep.currentStepIndex }
   );
-  const value = { data, steps, updateFields, ...multipleStep, ...progressActive };
 
-  return <SignUpFormContext.Provider value={value}>
+  const contextValue = { data, steps, updateFields, ...multipleStep, ...progressActive };
+
+  return <SignUpFormContext.Provider value={contextValue}>
     {children}
   </SignUpFormContext.Provider>
 }
