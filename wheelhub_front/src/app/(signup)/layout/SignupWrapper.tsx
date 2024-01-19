@@ -11,11 +11,11 @@ export const SignUpWrapper = () => {
     <main>
       <ProgressBarSignupForm />
       <div className="stepsForm">
-        { steps.length - 1 > currentStepIndex ? (
+        { steps.length - 1 > currentStepIndex && (
           <h2>
             <span className="markedWord">Test</span> Frontend Wheel Hub
           </h2>
-        ) : null }
+        )}
         { currentStep }
       </div>
     </main>

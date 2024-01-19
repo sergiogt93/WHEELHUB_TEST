@@ -36,9 +36,6 @@
   @include numberProgressBar;
 }
 
-.iconProgressBarPrevious {
-}
-
 .numberProgressBarNext {
   @include numberProgressBar;
   background-color: $btn-bg-disabled;

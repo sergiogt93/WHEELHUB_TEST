@@ -1,10 +1,22 @@
 'use client'
 
-import { useState, useRef, FormEvent, RefObject, useEffect, Dispatch} from 'react'
+import { useState, useRef, FormEvent, RefObject, useEffect, Dispatch, useCallback} from 'react'
 import { PASS_MAX_LEN, PASS_MIN_LEN, PASS_REGEX, PASS_SUCCESS_LEN, TRACK_MAX_LEN } from '../signup.constants';
 import { useSignUpContext } from '#app/(signup)/context/SignupFormContext';
 import { useSpinnerSubmit } from '#app/(common)/useSpinnerSubmit';
 import { signupAPI } from '#core/signup/signup.service';
+
+interface StepUserFormData {
+  username: string;
+  password: string;
+  track: string;
+}
+
+interface StepUserFormErrors {
+  username: string;
+  password: string;
+  confirmPassword: string;
+}
 
 export const useStepUserForm = () => {
   const { data, isFirstStep, isLastStep, updateFields, back, next } = useSignUpContext();
@@ -12,9 +24,11 @@ export const useStepUserForm = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [tranckLength, setTranckLength] = useState(data.track.length);
 
-  const [errUsername, setErrUsername] = useState("");
-  const [errPassword, setErrPassword] = useState("");
-  const [errConfirmPassword, setErrConfirmPassword] = useState("");
+  const [errorsFields, setErrorsFields] = useState<StepUserFormErrors>({
+    username: '',
+    password: '',
+    confirmPassword: '',
+  });
 
   const tagUsername = useRef<HTMLInputElement>(null);
   const tagPassword = useRef<HTMLInputElement>(null);
@@ -24,67 +38,74 @@ export const useStepUserForm = () => {
 
   const {IconSpinner, loadingSpinner } = useSpinnerSubmit();
 
-  useEffect(() => {
-    handleChangeDisabled()
-  }, []);
+  const handleChangeDisabled = useCallback(() => {
+    setIsDisabled(
+      data.username.length === 0 ||
+      !PASS_REGEX.test(data.password) ||
+      !PASS_REGEX.test(confirmPassword) ||
+      data.password !== confirmPassword
+    )
+  }, [data.username, data.password, confirmPassword]);
 
   useEffect(() => {
-    removeIndicators(tagUsername, setErrUsername);
-    showErrorEmptyMessage(setErrUsername, data.username);
+    removeIndicators(tagUsername, 'username');
+    showErrorEmptyMessage('username', data.username);
     emptyInput(data.username, tagUsername);
-    handleChangeDisabled();
   }, [data.username]);
 
   useEffect(() => {
-    removeIndicators(tagPassword, setErrPassword);
-    showErrorEmptyMessage(setErrPassword, data.password);
-    showErrorPassMessage(setErrPassword, data.password);
+    removeIndicators(tagPassword, 'password');
+    showErrorEmptyMessage('password', data.password);
     emptyInput(data.password, tagPassword);
     strongWarningPassword(data.password, tagPassword);
     strongSuccessPassword(data.password, tagPassword);
-    isSamePass();
-    handleChangeDisabled();
-  }, [data.password, errPassword])
+  }, [data.password])
 
   useEffect(() => {
-    removeIndicators(tagConfirmPassword, setErrConfirmPassword);
-    showErrorEmptyMessage(setErrConfirmPassword, confirmPassword);
-    showErrorPassMessage(setErrConfirmPassword, confirmPassword);
+    removeIndicators(tagConfirmPassword, 'confirmPassword');
+    showErrorEmptyMessage('confirmPassword', confirmPassword);
     emptyInput(confirmPassword, tagConfirmPassword);
     strongWarningPassword(confirmPassword, tagConfirmPassword);
     strongSuccessPassword(confirmPassword, tagConfirmPassword);
-    isSamePass();
-    handleChangeDisabled();
   }, [confirmPassword])
 
-  const handleChangeUsername = (e: FormEvent<HTMLInputElement>) => {
+  useEffect(() => {
+    handleChangeDisabled();
+  }, [data.username, data.password, confirmPassword, handleChangeDisabled]);
+
+  const handleChangeField = (
+    field: keyof StepUserFormData,
+    value: string,
+    maxLength?: number
+  ) => {
+    if (maxLength && value.length > maxLength) return;
+
     updateFields({
       ...data,
-      username: e.currentTarget.value
-    })
-  }
+      [field]: value,
+    });
+  };
+
+  const handleChangeUsername = (e: FormEvent<HTMLInputElement>) => {
+    handleChangeField('username', e.currentTarget.value);
+  };
 
   const handleChangePassword = (e: FormEvent<HTMLInputElement>) => {
-    if(e.currentTarget.value.length > PASS_MAX_LEN) {
-      return
-    }
-    updateFields({
-      ...data,
-      password: e.currentTarget.value
-    })
+    handleChangeField('password', e.currentTarget.value, PASS_MAX_LEN);
+    showErrorPassMessage('password', data.password);
+    showErrorSamePassMessage('password');
+  };
+
+  const handleChangeConfirmPass = (e: FormEvent<HTMLInputElement>) => {
+    setConfirmPassword(e.currentTarget.value);
+    showErrorPassMessage('confirmPassword', confirmPassword);
+    showErrorSamePassMessage('confirmPassword');
   }
 
   const handleChangeTrack = (e: FormEvent<HTMLInputElement>) => {
-    if(e.currentTarget.value.length > TRACK_MAX_LEN) {
-      return
-    }
-
-    setTranckLength(e.currentTarget.value.length)
-    updateFields({
-      ...data,
-      track: e.currentTarget.value
-    })
-  }
+    handleChangeField('track', e.currentTarget.value, TRACK_MAX_LEN);
+    setTranckLength(e.currentTarget.value.length);
+  };
 
   const emptyInput = (value: string, tag: RefObject<HTMLInputElement>) => {
     if(value.length > 0) return;
@@ -94,7 +115,7 @@ export const useStepUserForm = () => {
 
   const strongWarningPassword = (value: string, tag: RefObject<HTMLInputElement>) => {
     if(tag.current === null) return;
-    if((value.length >= PASS_MIN_LEN) && (value.length < PASS_SUCCESS_LEN)) {
+    if(value.length >= PASS_MIN_LEN && value.length < PASS_SUCCESS_LEN) {
       if(!PASS_REGEX.test(value)) return;
       tag.current.classList.add('passStrongWarning');
     }
@@ -102,7 +123,7 @@ export const useStepUserForm = () => {
 
   const strongSuccessPassword = (value: string, tag: RefObject<HTMLInputElement>) => {
     if(tag.current === null) return;
-    if((value.length > PASS_SUCCESS_LEN)) {
+    if(value.length > PASS_SUCCESS_LEN) {
       if(!PASS_REGEX.test(value)) return;
       tag.current.classList.add('passStrongSuccess');
     }
@@ -112,47 +133,39 @@ export const useStepUserForm = () => {
     return PASS_REGEX.test(value);
   }
 
-  const showErrorEmptyMessage = (setState: Dispatch<React.SetStateAction<string>>, value: string) => {
+  const showErrorEmptyMessage = (field: keyof StepUserFormErrors, value: string) => {
     if(value.length === 0) {
-      setState("El campo es obligatorio");
+      setErrorsFields((prevErrors) => ({ ...prevErrors, [field]: 'El campo es obligatorio' }));
     }
   }
 
-  const showErrorPassMessage = (setState: Dispatch<React.SetStateAction<string>>, value: string) => {
+  const showErrorPassMessage = (field: keyof StepUserFormErrors, value: string) => {
     if(value.length > 0 && !isMatchRegexPassword(value)) {
-      setState("Min 8 - Max 24 caracteres, debe haber 1 número y una mayúscula)");
+      setErrorsFields((prevErrors) => ({
+        ...prevErrors,
+        [field]:
+          'Min 8 - Max 24 caracteres, debe haber 1 número y una mayúscula)',
+      }));
     }
+  };
+
+  const showErrorSamePassMessage = (field: keyof StepUserFormErrors) => {
+    if(!isSamePass()) return;
+    setErrorsFields((prevErrors) => ({
+      ...prevErrors,
+      password: 'Las contraseñas no son iguales',
+      confirmPassword: 'Las contraseñas no son iguales',
+    }));
   }
 
-  const isSamePass = () => {
-    if(!isMatchRegexPassword(data.password) || !isMatchRegexPassword(confirmPassword)) {
-      return;
-    }
-    if(data.password !== confirmPassword) {
-      setErrPassword("Las contraseñas no son iguales");
-      setErrConfirmPassword("Las contraseñas no son iguales");
-      return;
-    }
-    return;
-  }
+  const isSamePass = useCallback(() => {
+    return isMatchRegexPassword(data.password) && isMatchRegexPassword(confirmPassword)
+  }, [data.password, confirmPassword]);
 
-  const removeIndicators = (tag: RefObject<HTMLInputElement>, setState: Dispatch<React.SetStateAction<string>>) => {
+  const removeIndicators = (tag: RefObject<HTMLInputElement>, field: keyof StepUserFormErrors) => {
     if(tag.current === null) return;
     tag.current.classList.remove('boxErrInput', 'passStrongWarning', 'passStrongSuccess');
-    setState('');
-  }
-
-  const handleChangeConfirmPass = (e: FormEvent<HTMLInputElement>) => {
-    setConfirmPassword(e.currentTarget.value);
-  }
-
-  const handleChangeDisabled = () => {
-    setIsDisabled(
-      data.username.length === 0 ||
-      !PASS_REGEX.test(data.password) ||
-      !PASS_REGEX.test(confirmPassword) ||
-      data.password !== confirmPassword
-    )
+    setErrorsFields((prevErrors) => ({ ...prevErrors, [field]: '' }));
   }
 
   const sendForm = (e: FormEvent) => {
@@ -169,7 +182,7 @@ export const useStepUserForm = () => {
   }
 
   return {
-    data, errUsername, tagUsername, errPassword, confirmPassword, errConfirmPassword, tagPassword, tagConfirmPassword, tranckLength,
+    data,  tagUsername, confirmPassword, errorsFields, tagPassword, tagConfirmPassword, tranckLength,
     isFirstStep, isLastStep, isDisabled, IconSpinner, loadingSpinner, updateFields, handleChangeUsername, handleChangePassword,
     handleChangeTrack, emptyInput, strongWarningPassword, strongSuccessPassword,
     isMatchRegexPassword, handleChangeConfirmPass, sendForm, back

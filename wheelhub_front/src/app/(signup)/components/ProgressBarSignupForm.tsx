@@ -9,34 +9,27 @@ export const ProgressBarSignupForm = () => {
   const { steps, currentStepIndex } = useSignUpContext();
   const { calculateProgress } = useProgressActiveSteps({ steps, currentStepIndex});
 
+  const getClassName = (index: number) => {
+    if (index === currentStepIndex) return 'numberProgressBarActive';
+    if (index < currentStepIndex) return 'numberProgressBarPrevious';
+    if (index > currentStepIndex) return 'numberProgressBarNext';
+    return '';
+  };
+
   const getPages = () => {
     const pages = [];
     for (let index = 0; index < steps.length; index++) {
-      let className = '';
-      let fragment = <></>;
-      if(index === currentStepIndex) {
-        fragment = <div key={index} className='numberProgressBarActive'>
-          { index + 1 }
+      const className = getClassName(index);
+      const fragment = (
+        <div key={index} className={className}>
+          {index >= currentStepIndex && index + 1}
+          {index < currentStepIndex && <FaCheckCircle className="iconProgressBarPrevious" />}
         </div>
-      }
-
-      if(index < currentStepIndex) {
-        fragment = <div key={index} className='numberProgressBarPrevious'>
-          <FaCheckCircle className='iconProgressBarPrevious'/>
-        </div>
-      }
-
-      if(index > currentStepIndex) {
-        className = 'numberProgressBarNext';
-        fragment = <div key={index} className='numberProgressBarNext'>
-          { index + 1 }
-        </div>
-      }
-
-      pages.push(fragment)
+      );
+      pages.push(fragment);
     }
     return pages;
-  }
+  };
 
   return (
     <div className="mainProgressBar">

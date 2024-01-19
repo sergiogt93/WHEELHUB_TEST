@@ -8,7 +8,7 @@ import { usePasswordToogle } from "#app/(signup)/hooks/usePasswordToogle";
 
 export const StepUserForm = () => {
   const {
-    data, errUsername, tagUsername, errPassword, tagPassword, confirmPassword, errConfirmPassword, tagConfirmPassword, tranckLength,
+    data, tagUsername, tagPassword, confirmPassword, tagConfirmPassword, errorsFields, tranckLength,
     isFirstStep, isLastStep, isDisabled, IconSpinner, loadingSpinner,
     handleChangeUsername, handleChangePassword,
     handleChangeConfirmPass, handleChangeTrack, sendForm, back
@@ -36,7 +36,7 @@ export const StepUserForm = () => {
           ref={tagUsername}
           data-testid={"username"}
         />
-        { renderError(errUsername) }
+        { renderError(errorsFields.username) }
       </div>
       <div className="formGroupPasswordUserReg">
         <div className="groupShowIconPass">
@@ -52,7 +52,7 @@ export const StepUserForm = () => {
             data-testid={"password"}
           />
           <IconPass className='passToogleIcon' onClick={togglePassVisibility}/>
-          { renderError(errUsername) }
+          { renderError(errorsFields.password) }
         </div>
         <div className="groupShowIconPass">
           <label htmlFor="confirmPassword">Repite tu contraseña</label>
@@ -67,7 +67,7 @@ export const StepUserForm = () => {
             data-testid={"confirmPassword"}
           />
           <IconConfirmPass className='passToogleIcon' onClick={toggleConfirmPassVisibility} />
-          { renderError(errUsername) }
+          { renderError(errorsFields.confirmPassword) }
         </div>
       </div>
       <p>
