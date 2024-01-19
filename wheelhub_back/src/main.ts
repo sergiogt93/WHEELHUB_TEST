@@ -8,7 +8,7 @@ dotenv.config();
 
 const app = express();
 const port = process.env.APP_PORT;
-const PREFIX_URI = '/api/v1';
+const PREFIX_URI = '/api/v2';
 
 app.use(express.json());
 app.use(cors({ origin: "*"}));
