@@ -5,15 +5,27 @@
   background-color: $light-green-color;
 }
 
-.boxProgressBar {
-  position: relative;
-  margin: auto 20%;
-  width: 60%;
+.bodyProgressBar {
   display: flex;
   justify-content: space-around;
   align-items: center;
+  margin: auto 20%;
+}
+
+.boxProgressBar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex-flow: column wrap;
+  width: 60%;
   gap: 1rem;
   padding: 1rem;
+}
+
+.descriptionProgressBar {
+  position: absolute;
+  top: 0;
+  text-align: center;
 }
 
 @mixin numberProgressBar {
@@ -23,6 +35,7 @@
   align-items: center;
   padding: 1.5rem;
   height: .5rem;
+  background-color: $dark-green-color;
   z-index: 1;
 }
 
@@ -30,29 +43,43 @@
   @include numberProgressBar;
   background-color: $dark-green-color;
   color: $white;
+  border: 1px solid $dark-green-color;
 }
 
 .numberProgressBarPrevious {
   @include numberProgressBar;
+  background-color: $dark-green-color;
+  color: white;
+  font-size: 1.25rem;
+  line-height: 1.75rem;
 }
 
 .numberProgressBarNext {
   @include numberProgressBar;
   background-color: $btn-bg-disabled;
+  border: 1px solid $btn-bg-disabled;
   color: $white;
 }
 
 .lineProgressBar {
   position: absolute;
-  width: 60%;
-  top: 35%;
+  width: 40%;
 }
 
 .indicatorProgressBar {
   height: .2rem;
   appearance: none;
-  background: $white;
   width: 100%;
+}
+
+.indicatorProgressBar::before {
+  background: $white;
+  border: 1px solid $white;
+}
+
+.indicatorProgressBar {
+  background: $white;
+  border: 1px solid $white;
 
   /*Chrome and safari */
   &::-webkit-progress-bar {
@@ -68,3 +95,4 @@
     background-color: $dark-green-color;
   }
 }
+

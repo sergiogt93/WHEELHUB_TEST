@@ -2,22 +2,22 @@
 @import "utils";
 
 /************************* Specifity welcome step styles **********************/
-.confirmBoxInput {
-  display: block;
+.confirmBox {
   position: relative;
-  cursor: pointer;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
 }
 
-.confirmBoxInput input {
+.confirmBox label {
   position: absolute;
-  opacity: 0;
+}
+
+.confirmBox input {
   cursor: pointer;
-  height: 0;
-  width: 0;
+  height: 2rem;
+  width: 2rem;
 }
 
 /************************* Specifity user step styles **********************/

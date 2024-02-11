@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import imgSuccess from '#root/public/assets/img/success.png';
-import "#styles/stepsForm.scss";
+import "#styles/common/stepsForm.scss";
 import '#styles/signup/stepSignupForm.scss';
 import { useSignUpContext } from '#app/(signup)/context/SignupFormContext';
 

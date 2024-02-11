@@ -1,7 +1,7 @@
 'use client'
 
 import { useSignUpContext } from '#app/(signup)/context/SignupFormContext';
-import "#styles/stepsForm.scss";
+import "#styles/common/stepsForm.scss";
 import { ProgressBarSignupForm } from '#app/(signup)/components/ProgressBarSignupForm';
 
 export const SignUpWrapper = () => {

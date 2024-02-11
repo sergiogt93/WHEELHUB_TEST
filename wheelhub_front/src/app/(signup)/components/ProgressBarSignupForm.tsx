@@ -1,9 +1,8 @@
 'use client'
 
-import '#styles/signup/progressBarSignupForm.scss';
+import '#styles/common/progressBarSignupForm.scss';
 import { useSignUpContext } from '#app/(signup)/context/SignupFormContext';
 import { useProgressActiveSteps } from '#app/(common)/useProgressActiveSteps';
-import { FaCheckCircle } from "react-icons/fa";
 
 export const ProgressBarSignupForm = () => {
   const { steps, currentStepIndex } = useSignUpContext();
@@ -16,25 +15,27 @@ export const ProgressBarSignupForm = () => {
     return '';
   };
 
-  const getPages = () => {
-    const pages = [];
+  const displayStepProgress = () => {
+    const stepsProgress = [];
     for (let index = 0; index < steps.length; index++) {
       const className = getClassName(index);
       const fragment = (
-        <div key={index} className={className}>
+        <div key={index} className='boxProgressBar'>
+        <div className={className}>
           {index >= currentStepIndex && index + 1}
-          {index < currentStepIndex && <FaCheckCircle className="iconProgressBarPrevious" />}
+          {index < currentStepIndex && <span className="iconProgressBarPrevious">&#10003;</span>}
         </div>
+      </div>
       );
-      pages.push(fragment);
+      stepsProgress.push(fragment);
     }
-    return pages;
+    return stepsProgress;
   };
 
   return (
     <div className="mainProgressBar">
-      <div className='boxProgressBar'>
-        { getPages() }
+      <div className='bodyProgressBar'>
+        { displayStepProgress() }
         <div className='lineProgressBar'>
           <progress className='indicatorProgressBar' value={calculateProgress} max={100}></progress>
         </div>

@@ -4,7 +4,7 @@ import Image from "next/image";
 import { FormEvent } from "react";
 import { useSignUpContext } from "#app/(signup)/context/SignupFormContext";
 import imgLogo from "#root/public/assets/img/Logotipo-Vertical-Verde-Alta.png";
-import "#styles/stepsForm.scss";
+import "#styles/common/stepsForm.scss";
 import '#styles/signup/stepSignupForm.scss';
 
 export const StepWelcomeForm = () => {
@@ -41,19 +41,20 @@ export const StepWelcomeForm = () => {
             y una pista para recordar (como dato opcional).
           </p>
           <p>En tercer lugar, deberá visualizarse el mensaje de éxito de creación</p>
-          <label className="confirmBoxInput" htmlFor="confirmed">
+          <div className="confirmBox">
             <input
-              type="checkbox"
-              id="confirmed"
-              name="confirmed"
-              checked={data.isConfirmed}
-              onChange={handleChangeConfirmed}
-              data-testid="confirmed"
-            />
-            <span className="inputMark"></span>
-            <p className="textInputMark">Confirma que es mayor de edad, y acepta el tratamiento de sus
-            datos según la política de protección de datos vigente.</p>
-          </label>
+                type="checkbox"
+                id="confirmed"
+                name="confirmed"
+                checked={data.isConfirmed}
+                onChange={handleChangeConfirmed}
+                data-testid="confirmed"
+              />
+            <label htmlFor="confirmed">
+              Confirma que es mayor de edad, y acepta el tratamiento de sus
+              datos según la política de protección de datos vigente.
+            </label>
+          </div>
         </div>
       </form>
       <div className='stepFormActions'>

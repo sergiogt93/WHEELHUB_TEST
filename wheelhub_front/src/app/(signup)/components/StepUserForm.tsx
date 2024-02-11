@@ -1,7 +1,7 @@
 'use client'
 
 import {  TRACK_MAX_LEN } from "#app/(signup)/signup.constants";
-import "#styles/stepsForm.scss";
+import "#styles/common/stepsForm.scss";
 import '#styles/signup/stepSignupForm.scss';
 import { useStepUserForm } from "#app/(signup)/hooks/useStepUserForm";
 import { usePasswordToogle } from "#app/(signup)/hooks/usePasswordToogle";

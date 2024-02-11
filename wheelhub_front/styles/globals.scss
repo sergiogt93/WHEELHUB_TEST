@@ -1,6 +1,10 @@
 @import "base";
 @import "utils";
 
+:root {
+  accent-color: $dark-green-color;
+}
+
 body {
   margin: 0;
   font-family: 'Quicksand', sans-serif;
